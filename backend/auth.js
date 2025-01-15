@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
-const SECRET_KEY = "1!1nbdsugd#$2hjdhnds*kdpjs12";
+const SECRET_KEY = "1!1nbdsugd#$2hjdhnds*kdpjs1d2";
 
 export async function signup(req, res) {
   const { Nome, Email, Senha } = req.body;
