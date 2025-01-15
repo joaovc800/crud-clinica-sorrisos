@@ -1,0 +1,55 @@
+version: "3.8"
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./backend/.env
+    environment:
+      DATABASE_URL: postgresql://postgres:pabd@db:5432/ProjetoFinal
+    volumes:
+    - ./backend:/app
+    - /app/node_modules
+    command: >
+      sh -c "until nc -z db 5432; do
+        echo 'Waiting for the database...';
+        sleep 2;
+      done;
+      npx prisma migrate dev --name init
+      npx prisma migrate dev &&
+      npx prisma generate &&
+      npm run dev"
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend/src:/usr/share/nginx/html
+
+  db:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pabd
+      POSTGRES_DB: ProjetoFinal
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  pgweb:
+    image: sosedoff/pgweb
+    ports:
+      - "8081:8081"
+    environment:
+      PGWEB_DATABASE_URL: postgresql://postgres:pabd@db:5432/ProjetoFinal?sslmode=disable
+    depends_on:
+      - db
+volumes:
+  db_data:
