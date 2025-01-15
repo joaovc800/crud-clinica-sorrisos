@@ -21,7 +21,7 @@ class PacienteController {
     const Endereco = req.body.Endereco;
     const DataNascimento = req.body.DataNascimento; 
     const Sexo  = req.body.Sexo;
-    const Paciente = await PacienteModel.create({ Cpf, Nome, Telefone, Endereco, DataNascimento, Historico, Sexo  });
+    const Paciente = await PacienteModel.create({ Cpf, Nome, Telefone, Endereco, DataNascimento, Sexo  });
     res.json(Paciente);
   }
 
